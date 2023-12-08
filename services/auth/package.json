@@ -1,0 +1,27 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.10.0",
+    "@firebase/auth": "^1.5.1",
+    "@prisma/client": "^5.7.0",
+    "fastify": "^4.24.3",
+    "firebase": "^10.7.1",
+    "firestore": "^1.1.6",
+    "prom-client": "^15.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "prisma": "^5.7.0",
+    "supertest": "^6.3.3",
+    "typescript": "^5.3.3"
+  }
+}

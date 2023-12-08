@@ -1,0 +1,6 @@
+cluster.name: my_cluster
+node.name: my_node
+path.data: /path/to/data
+path.logs: /path/to/logs
+network.host: 0.0.0.0
+http.port: 9200

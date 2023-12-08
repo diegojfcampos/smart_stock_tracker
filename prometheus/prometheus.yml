@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'auth'
+    static_configs:
+      - targets: ['auth-service:3000']  
+
+  - job_name: 'earnings'
+    static_configs:
+      - targets: ['earnings-service:3000']  
+
+  - job_name: 'wallet'
+    static_configs:
+      - targets: ['wallet-service:3000'] 
+  
+  - job_name: 'stockTax'
+    static_configs:
+      - targets: ['stockTax-service:3000'] 
+
+

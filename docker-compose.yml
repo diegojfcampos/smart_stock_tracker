@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  backend:
+    image: "diegojfcampos/bounce:api"
+    ports:
+      - "3002:3002"
+
+  frontend:
+    image: "diegojfcampos/bounce:web"
+    ports:
+      - "3000:3000"
+
+  prometheus:
+    image: "diegojfcampos/bounce:prometheus"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest-ubuntu
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  jenkins: 
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+
+
+volumes:
+  grafana-data:
