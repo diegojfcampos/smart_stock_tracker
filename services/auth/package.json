@@ -1,5 +1,5 @@
 {
-  "name": "auth",
+  "name": "service-auth",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
@@ -8,7 +8,7 @@
     "dev": "nodemon --exec ts-node src/server.ts | npx pino-pretty"
   },
   "keywords": [],
-  "author": "",
+  "author": "Diego J F Campos",
   "license": "ISC",
   "dependencies": {
     "@elastic/elasticsearch": "^8.10.0",
@@ -23,7 +23,6 @@
     "bcrypt": "^5.1.1",
     "fastify": "^4.24.3",
     "firebase": "^10.7.1",
-    "firestore": "^1.1.6",
     "prom-client": "^15.0.0",
     "uuid": "^9.0.1"
   },
