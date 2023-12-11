@@ -24,7 +24,8 @@
     "fastify": "^4.24.3",
     "firebase": "^10.7.1",
     "prom-client": "^15.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.6.1",

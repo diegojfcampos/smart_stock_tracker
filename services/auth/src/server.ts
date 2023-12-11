@@ -1,17 +1,19 @@
 import fastify, { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import bcryptInstance = require("bcrypt");
+import { z } from "zod";
 const prisma = new PrismaClient({ log: ["query", "info", "warn"] });
 const { prometheus, totalRequestsCounter } = require("./configs/prometheusMetrics");
 const uuid = require("uuid");
+
 
 //FireBase
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
+//Firebase instances
 const firebase = initializeApp(require("./configs/fireBaseConfig"));
-const analytics = getAnalytics(firebase);
 const auth = getAuth(firebase);
 
 
@@ -24,8 +26,8 @@ declare module "fastify" {
     prometheus: typeof prometheus;
     uuid: typeof uuid;    
     firebase: typeof firebase;
-    analytics: typeof analytics;
     auth: typeof auth;
+    z: typeof z;
   }
 }
 
@@ -41,7 +43,10 @@ app.log.info("Registered => @prometheus");
 const start = async () => {
   try {
 
-    app.decorate("firebase", auth);
+    //Registering @Firebase
+    app.decorate("firebase", firebase);
+    app.log.info("Registered => @firebase/analystcs/auth");
+
     // Registering @Fastify/Cors
     app.register(require("@fastify/cors"), require("./configs/corsConfig"));
     app.log.info("Registered => @fastify/cors");
@@ -57,6 +62,10 @@ const start = async () => {
     // Decorating @Primas
     app.decorate("prisma", prisma);
     app.log.info("Registered => @prisma");
+
+     // Decorating @Zod
+    app.decorate("z", z);
+    app.log.info("Registered => @zod");
 
     // Registering @Fastify/Env
     app.register(require("@fastify/env"), require("./configs/envConfig"));

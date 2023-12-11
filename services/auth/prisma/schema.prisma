@@ -16,14 +16,17 @@ generator erd {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  email     String   @unique
-  name      String?
-  role      Role     @default(USER)
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  email     String    @unique
+  firstName String?
+  lastName  String?
+  role      Role      @default(USER)
 }
 
 enum Role {
   USER
   ADMIN
+  PREMIUM
 }
