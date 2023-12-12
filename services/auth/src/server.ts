@@ -7,7 +7,6 @@ const { prometheus, totalRequestsCounter } = require("./configs/prometheusMetric
 const jwt = require("@fastify/jwt");
 const uuid = require("uuid");
 
-//FireBase
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -85,7 +84,7 @@ const start = async () => {
     });
 
     app.register(require("./routes/signup") , { prefix: '/api' });
-    // app.register(require("./routes/googleAuth") , { prefix: '/api' });
+    app.register(require("./routes/auth") , { prefix: '/api' });
 
     await app.listen({ host: "0.0.0.0", port: 3002 });
   } catch (err) {

@@ -47,6 +47,7 @@ async function registerRoutes(app: FastifyInstance, request: FastifyRequest, opt
         } catch(err) {
             reply.status(500).send({ error: 'Something went wrong when creating the user.' });
         }
+        done();
     });
 
     

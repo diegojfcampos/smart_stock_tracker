@@ -5,7 +5,6 @@ const firebaseAuthSchema = {
           required: ['idToken'],
           properties: {
           idToken: { type: 'string'},
-
           }
       },
       response: {

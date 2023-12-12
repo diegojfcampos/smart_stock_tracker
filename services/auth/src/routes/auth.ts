@@ -11,9 +11,9 @@ firebaseAdmin.initializeApp({
 
 const firebaseAuthSchema = require("../models/firebaseAuthModel")
 
-function firebaseAuth(app: FastifyInstance, request: FastifyRequest, reply: FastifyReply, opts: any, done: () => void){
+async function firebaseAuth(app: FastifyInstance,  request: FastifyRequest, options: any, reply: FastifyReply, done: () => void){
     
-    app.get("/auth", firebaseAuthSchema, async (request, reply) =>{ 
+    app.post("/auth", firebaseAuthSchema, async (request, reply) =>{ 
 
         try{
             const idToken = request.body;
@@ -51,10 +51,13 @@ function firebaseAuth(app: FastifyInstance, request: FastifyRequest, reply: Fast
         }catch(err){
             console.log("Error to authenticade: " + err);
             reply.status(500).send({success: false, mensage: "Error to authenticade token"})
+              
+            
         }
+        done();
     })
-
-    done();
+ 
+   
 }
 
-
+module.exports = firebaseAuth;
