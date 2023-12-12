@@ -4,18 +4,10 @@ import bcryptInstance = require("bcrypt");
 import { z } from "zod";
 const prisma = new PrismaClient({ log: ["query", "info", "warn"] });
 const { prometheus, totalRequestsCounter } = require("./configs/prometheusMetrics");
+const jwt = require("@fastify/jwt");
 const uuid = require("uuid");
 
-
 //FireBase
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-
-//Firebase instances
-const firebase = initializeApp(require("./configs/fireBaseConfig"));
-const auth = getAuth(firebase);
-
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -25,9 +17,8 @@ declare module "fastify" {
     bcrypt: typeof bcryptInstance;
     prometheus: typeof prometheus;
     uuid: typeof uuid;    
-    firebase: typeof firebase;
-    auth: typeof auth;
     z: typeof z;
+    jwt: typeof jwt; 
   }
 }
 
@@ -43,10 +34,6 @@ app.log.info("Registered => @prometheus");
 const start = async () => {
   try {
 
-    //Registering @Firebase
-    app.decorate("firebase", firebase);
-    app.log.info("Registered => @firebase/analystcs/auth");
-
     // Registering @Fastify/Cors
     app.register(require("@fastify/cors"), require("./configs/corsConfig"));
     app.log.info("Registered => @fastify/cors");
@@ -59,7 +46,7 @@ const start = async () => {
     app.decorate("uuid", uuid);
     app.log.info("Registered => @uuid");
 
-    // Decorating @Primas
+    // Decorating @Prisma
     app.decorate("prisma", prisma);
     app.log.info("Registered => @prisma");
 
@@ -68,11 +55,11 @@ const start = async () => {
     app.log.info("Registered => @zod");
 
     // Registering @Fastify/Env
-    app.register(require("@fastify/env"), require("./configs/envConfig"));
+    await app.register(require("@fastify/env"), require("./configs/envConfig"));
     app.log.info("Registered => @fastify/env");
 
     // Registering @Fastify/Jwt
-    app.register(require("@fastify/jwt"), {
+    await app.register(jwt, {
       secret: process.env.SECRET,
       sign: { expiresIn: "2h" },
     });
@@ -97,7 +84,10 @@ const start = async () => {
       reply.send(metrics);
     });
 
-    await app.listen({ host: "0.0.0.0", port: 3003 });
+    app.register(require("./routes/signup") , { prefix: '/api' });
+    // app.register(require("./routes/googleAuth") , { prefix: '/api' });
+
+    await app.listen({ host: "0.0.0.0", port: 3002 });
   } catch (err) {
     app.log.error(err);
     process.exit(1);

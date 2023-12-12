@@ -14,10 +14,7 @@ const registerSchema = {
             type: 'object',
             properties: {
                 id: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'object', properties: { roleId: { type: 'string' } } },
-                createdAt: { type: 'string', format: 'date-time' },
-                updatedAt: { type: 'string', format: 'date-time' },              
+                email: { type: 'string', format: 'email' },   
                 token: {type: 'string'}
             }
         }
