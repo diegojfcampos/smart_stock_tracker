@@ -83,10 +83,11 @@ const start = async () => {
       reply.send(metrics);
     });
 
-    app.register(require("./routes/signup") , { prefix: '/api' });
+    app.register(require("./routes/register") , { prefix: '/api' });
+    app.register(require("./routes/firebase-auth") , { prefix: '/api' });
     app.register(require("./routes/auth") , { prefix: '/api' });
 
-    await app.listen({ host: "0.0.0.0", port: 3001 });
+    await app.listen({ host: "0.0.0.0", port: 3004 });
   } catch (err) {
     app.log.error(err);
     process.exit(1);

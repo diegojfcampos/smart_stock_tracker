@@ -1,24 +1,24 @@
 const firebaseAuthSchema = {
-  schema: {
-      body: {
-          type: 'object',
-          required: ['idToken'],
-          properties: {
-          idToken: { type: 'string'},
-          }
-      },
-      response: {
-          200: {
-          type: 'object',
-          properties: {
-              id: { type: 'string' },
-              email: { type: 'string', format: 'email' },   
-              token: {type: 'string'}
-          }
+    schema: {
+        body: {
+            type: 'object',
+            required: ['idToken'],
+            properties: {
+            idToken: { type: 'string'},
+            }
+        },
+        response: {
+            200: {
+            type: 'object',
+            properties: {
+                success: {type: 'boolean'},
+                id: { type: 'string' },  
+                token: {type: 'string'}
+            }
+        }
       }
     }
-  }
-};
-
-
-module.exports = firebaseAuthSchema;
+  };
+  
+  
+  module.exports = firebaseAuthSchema;

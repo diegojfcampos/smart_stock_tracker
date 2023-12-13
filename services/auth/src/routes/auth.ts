@@ -1,63 +1,48 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 
-//Firebase admin instance and configs
+const authSchema = require("../models/authModel");
 
-const firebaseAdmin = require("firebase-admin");
-const serviceAccount = require("/home/diego/Desktop/Studies/CLOUD/smart-stock-tracker-firebase-adminsdk-p4x6a-e49badda11.json");
-
-firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(serviceAccount)
-});
-
-const firebaseAuthSchema = require("../models/firebaseAuthModel")
-
-async function firebaseAuth(app: FastifyInstance,  request: FastifyRequest, options: any, reply: FastifyReply, done: () => void){
-    
-    app.post("/auth", firebaseAuthSchema, async (request, reply) =>{ 
-
-        try{
-            const idToken = request.body;
-            const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);           
-
-            const email =  decodedToken.email;
-
-            const checkUser = await app.prisma.user.findUnique({
-                where: {email},
-            });
-            
-            const newToken = app.jwt.sign({id: checkUser?.id , email: checkUser?.email}, process.env.SECRET);
-
-            if(checkUser) {
-
-                reply.status(200).send({status: true, id: checkUser.id, email: checkUser.email, newToken });
-
-            }else{
-
-                const newUser = await app.prisma.user.create({
-                    data: {
-                      email: decodedToken.email,  
-                      userName: decodedToken.name,
-                      phoneNumber: decodedToken.phone_number                                           
-                    },
-                });
-
-                if(newUser){
-                    reply.status(200).send({ status: true, id: newUser.id, email: newUser.email, newToken });
-                }else{
-                    reply.status(400).send( { status: false, message: "Error to register user" } );
-                }
-            }
-
-        }catch(err){
-            console.log("Error to authenticade: " + err);
-            reply.status(500).send({success: false, mensage: "Error to authenticade token"})
-              
-            
-        }
-        done();
-    })
- 
-   
+interface Body {
+  userEmail: string;
+  userPassword: string;
 }
 
-module.exports = firebaseAuth;
+async function auth(app: FastifyInstance, request: FastifyRequest, reply: FastifyReply, options: any, done: () => void) {
+  app.post("/auth", authSchema, async (request, reply) => {
+    try {
+      const { userEmail, userPassword } = request.body as Body;
+
+      if (!userEmail || !userPassword) {
+        return reply.status(400).send({ status: false, message: "Email or password is missing" });
+      }
+
+      const userExists = await app.prisma.user.findFirst({
+        where: {
+          email: userEmail,
+        },
+      });
+
+      if(!userExists) return reply.status(400).send({ status: false, message: "Email or password is missing" });
+       
+      const token = app.jwt.hash({id: userExists.id}, process.env.SECRETE);
+
+      if(userExists.password !== null){
+        const passwordMatch = await app.bcrypt.compare(userPassword, userExists.password);
+        if(passwordMatch){
+          reply.status(200).send({status: true, id: userExists.id, token});
+        }else{
+          reply.status(400).send({status: false, message: "Wrong password"});
+        }
+      }else{
+        reply.status(200).send({status: true, id: userExists.id, token});
+      }  
+
+    } catch (err) {
+      console.log("Error during authentication: " + err);
+      reply.status(500).send({status: false, message: "Something went wrond during authentication"});
+    }
+    done();
+  });
+}
+
+module.exports = auth;

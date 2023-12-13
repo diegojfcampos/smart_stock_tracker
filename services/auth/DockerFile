@@ -8,4 +8,7 @@ RUN npm install
 
 EXPOSE 3001
 
+ENV DATABASE_URL=mysql://admin:admin123@localhost:3306/DB_SST_AUTH
+ENV SECRET=&0f1e1291%c4c1@4b99/bb76\28dcfce45e3a|
+
 CMD ["npm", "start"]

@@ -13,8 +13,8 @@ const registerSchema = {
             200: {
             type: 'object',
             properties: {
+                success: {type: 'boolean'},
                 id: { type: 'string' },
-                email: { type: 'string', format: 'email' },   
                 token: {type: 'string'}
             }
         }
