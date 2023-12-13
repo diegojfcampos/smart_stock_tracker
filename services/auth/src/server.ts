@@ -74,7 +74,7 @@ const start = async () => {
      */
     app.get("/", async (request, reply) => {
       totalRequestsCounter.inc();
-      reply.send({ Server_Status: "Running  => http://0.0.0.0:3003/api/doc" });
+      reply.send({ Server_Status: "Running  => http://0.0.0.0:3001/api/doc" });
     });
 
     app.get("/metric", async (request, reply) => {
@@ -86,7 +86,7 @@ const start = async () => {
     app.register(require("./routes/signup") , { prefix: '/api' });
     app.register(require("./routes/auth") , { prefix: '/api' });
 
-    await app.listen({ host: "0.0.0.0", port: 3002 });
+    await app.listen({ host: "0.0.0.0", port: 3001 });
   } catch (err) {
     app.log.error(err);
     process.exit(1);
