@@ -11,7 +11,7 @@ const firebaseAuthSchema = {
             200: {
             type: 'object',
             properties: {
-                success: {type: 'boolean'},
+                status: {type: 'boolean'},
                 id: { type: 'string' },  
                 token: {type: 'string'}
             }

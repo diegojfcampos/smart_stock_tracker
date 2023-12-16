@@ -22,8 +22,7 @@ async function registerRoutes(app: FastifyInstance, request: FastifyRequest, opt
 
             if(userExists) return reply.status(400).send({status: false, error: "User already registered"});   
             
-            const hashedPassword = await app.bcrypt.hash(password, 12);
-           
+            const hashedPassword = await app.bcrypt.hash(password, 12);           
 
             const user = {                
                 email,
@@ -35,7 +34,7 @@ async function registerRoutes(app: FastifyInstance, request: FastifyRequest, opt
            if(!registerUser){
                 reply.status(402).send({status: false, message: "Error to register the user"})
            } else{             
-                const token = app.jwt.sign({ id: registerUser.id}, process.env.SECRET);  
+                const token = await app.jwt.sign({ id: registerUser.id}, process.env.SECRET);  
                 
                 if(!registerUser){
                     reply.status(402).send({status: false, message: "Query error to register the user"})

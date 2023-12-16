@@ -3,31 +3,31 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 const authSchema = require("../models/authModel");
 
 interface Body {
-  userEmail: string;
-  userPassword: string;
+  email: string;
+  password: string;
 }
 
 async function auth(app: FastifyInstance, request: FastifyRequest, reply: FastifyReply, options: any, done: () => void) {
   app.post("/auth", authSchema, async (request, reply) => {
     try {
-      const { userEmail, userPassword } = request.body as Body;
+      const { email, password } = request.body as Body;
 
-      if (!userEmail || !userPassword) {
+      if (!email || !password) {
         return reply.status(400).send({ status: false, message: "Email or password is missing" });
       }
-
       const userExists = await app.prisma.user.findFirst({
         where: {
-          email: userEmail,
+          email: email,
         },
       });
 
-      if(!userExists) return reply.status(400).send({ status: false, message: "Email or password is missing" });
+      if(!userExists) return reply.status(400).send({ status: false, message: "User doesn't exists" });
        
-      const token = app.jwt.hash({id: userExists.id}, process.env.SECRETE);
+      const token = await app.jwt.sign({id: userExists.id}, process.env.SECRET);
+
 
       if(userExists.password !== null){
-        const passwordMatch = await app.bcrypt.compare(userPassword, userExists.password);
+        const passwordMatch = await app.bcrypt.compare(password, userExists.password);
         if(passwordMatch){
           reply.status(200).send({status: true, id: userExists.id, token});
         }else{
@@ -41,7 +41,7 @@ async function auth(app: FastifyInstance, request: FastifyRequest, reply: Fastif
       console.log("Error during authentication: " + err);
       reply.status(500).send({status: false, message: "Something went wrond during authentication"});
     }
-    done();
+  
   });
 }
 

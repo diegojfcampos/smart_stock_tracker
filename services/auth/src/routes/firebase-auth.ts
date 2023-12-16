@@ -34,7 +34,8 @@ async function firebaseAuth(app: FastifyInstance,  request: FastifyRequest, opti
                     data: {
                       email: decodedToken.email,  
                       userName: decodedToken.name,
-                      phoneNumber: decodedToken.phone_number                                           
+                      phoneNumber: decodedToken.phone_number,
+                      firebase: true                                           
                     },
                 });
 
@@ -44,13 +45,13 @@ async function firebaseAuth(app: FastifyInstance,  request: FastifyRequest, opti
                     reply.status(400).send( { status: false, message: "Error to register user" } );
                 }
             }
-
+        
         }catch(err){
             console.log("Error to authenticade: " + err);
-            reply.status(500).send({success: false, mensage: "Error to authenticade token"})           
-            
+            reply.status(500).send({status: false, mensage: "Error to authenticade token"})           
+        
         }
-        done();
+        
     })
  
    

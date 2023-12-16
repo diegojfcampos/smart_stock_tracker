@@ -24,12 +24,11 @@ model User {
   phoneNumber String?
   birthday    DateTime?
   updatedAt   DateTime?
-  firebase    String?
   role        Role      @default(USER)
+  firebase    Boolean   @default(false)
 }
 
 enum Role {
   USER
-  ADMIN
   PREMIUM
 }

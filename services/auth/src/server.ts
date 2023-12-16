@@ -1,12 +1,24 @@
-import fastify, { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { PrismaClient } from "@prisma/client";
-import bcryptInstance = require("bcrypt");
-import { z } from "zod";
-const prisma = new PrismaClient({ log: ["query", "info", "warn"] });
-const { prometheus, totalRequestsCounter } = require("./configs/prometheusMetrics");
-const jwt = require("@fastify/jwt");
-const uuid = require("uuid");
+import fastify, {
+  FastifyInstance,
+  FastifyRequest,
+  FastifyReply,
+} from "fastify";
 
+import { PrismaClient } from "@prisma/client";
+
+import bcryptInstance = require("bcrypt");
+
+const prisma = new PrismaClient({ log: ["query", "info", "warn"] });
+
+const {
+  prometheus,
+  totalRequestsCounter,
+} = require("./configs/prometheusMetrics");
+
+const jwt = require("@fastify/jwt");
+
+
+const uuid = require("uuid");
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -15,9 +27,8 @@ declare module "fastify" {
     reply: FastifyReply;
     bcrypt: typeof bcryptInstance;
     prometheus: typeof prometheus;
-    uuid: typeof uuid;    
-    z: typeof z;
-    jwt: typeof jwt; 
+    uuid: typeof uuid;
+    jwt: typeof jwt;
   }
 }
 
@@ -32,7 +43,6 @@ app.log.info("Registered => @prometheus");
 
 const start = async () => {
   try {
-
     // Registering @Fastify/Cors
     app.register(require("@fastify/cors"), require("./configs/corsConfig"));
     app.log.info("Registered => @fastify/cors");
@@ -49,10 +59,6 @@ const start = async () => {
     app.decorate("prisma", prisma);
     app.log.info("Registered => @prisma");
 
-     // Decorating @Zod
-    app.decorate("z", z);
-    app.log.info("Registered => @zod");
-
     // Registering @Fastify/Env
     await app.register(require("@fastify/env"), require("./configs/envConfig"));
     app.log.info("Registered => @fastify/env");
@@ -66,7 +72,10 @@ const start = async () => {
 
     // Registering @Fastify/Swagger
     await app.register(require("@fastify/swagger"));
-    app.register(require("@fastify/swagger-ui"), require("./configs/swaggerConfig"));
+    app.register(
+      require("@fastify/swagger-ui"),
+      require("./configs/swaggerConfig")
+    );
     app.log.info("Registered => @fastify/swagger");
 
     /*
@@ -83,11 +92,12 @@ const start = async () => {
       reply.send(metrics);
     });
 
-    app.register(require("./routes/register") , { prefix: '/api' });
-    app.register(require("./routes/firebase-auth") , { prefix: '/api' });
-    app.register(require("./routes/auth") , { prefix: '/api' });
+    app.register(require("./routes/register"), { prefix: "/api" });
+    app.register(require("./routes/firebase-auth"), { prefix: "/api" });
+    app.register(require("./routes/auth"), { prefix: "/api" });
+    app.register(require("./routes/user"), { prefix: "/api" });
 
-    await app.listen({ host: "0.0.0.0", port: 3004 });
+    await app.listen({ host: "0.0.0.0", port: 3001 });
   } catch (err) {
     app.log.error(err);
     process.exit(1);
