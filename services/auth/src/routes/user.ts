@@ -182,7 +182,7 @@ async function userRoute(
         },
       });
   
-      reply.code(200).send({status: true, message: "user updated"})
+      reply.code(200).send({status: true, message: "User Updated"})
     } catch (err) {
       console.log("Error updating user: " + err);
       reply.code(500).send({ status: false, message: "Error updating user" });
@@ -262,7 +262,7 @@ async function userRoute(
             },
           });
 
-          reply.code(200).send({ status: true, message: "User updated" });
+          reply.code(200).send({ status: true, message: "User Updated" });
         } else {
           return reply
             .code(400)

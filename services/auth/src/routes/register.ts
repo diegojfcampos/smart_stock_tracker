@@ -14,13 +14,13 @@ async function registerRoutes(app: FastifyInstance, request: FastifyRequest, opt
             };
 
             if(!email || !password || !passwordVerification || password !== passwordVerification) 
-                return reply.status(400).send({status: false, error: "Passwords don't match"});    
+                return reply.status(400).send({status: false, message: "Passwords don't match"});    
 
             const userExists = await app.prisma.user.findUnique({
                     where: {email},
                 });
 
-            if(userExists) return reply.status(400).send({status: false, error: "User already registered"});   
+            if(userExists) return reply.status(400).send({status: false, message: "User already registered"});   
             
             const hashedPassword = await app.bcrypt.hash(password, 12);           
 
@@ -44,7 +44,7 @@ async function registerRoutes(app: FastifyInstance, request: FastifyRequest, opt
            }                   
 
         } catch(err) {
-            reply.status(500).send({status: false, error: 'Something went wrong when creating the user.' });
+            reply.status(500).send({status: false, message: 'Something went wrong when creating the user.' });
         }
         done();
     });
