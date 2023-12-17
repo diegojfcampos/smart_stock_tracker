@@ -1,12 +1,12 @@
 {
   "name": "service-auth",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/server.ts",
+  "description": "Smart Stock Tracker / Service AUTH",
+  "main": "app.ts",
   "scripts": {
     "start": "ts-node src/server.ts | npx pino-pretty",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec ts-node src/server.ts | npx pino-pretty"
+    "test": "jest",
+    "dev": "nodemon --exec ts-node app.ts | npx pino-pretty"
   },
   "keywords": [],
   "author": "Diego J F Campos",
@@ -28,8 +28,12 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.23.6",
+    "@babel/preset-typescript": "^7.23.3",
     "@mermaid-js/mermaid-cli": "^10.6.1",
     "@types/bcrypt": "^5.0.2",
+    "@types/jest": "^29.5.11",
+    "@types/supertest": "^2.0.16",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
     "prisma": "^5.7.0",

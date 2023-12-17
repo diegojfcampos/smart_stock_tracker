@@ -1,3 +1,5 @@
+// server.ts
+
 import fastify, {
   FastifyInstance,
   FastifyRequest,
@@ -5,8 +7,7 @@ import fastify, {
 } from "fastify";
 
 import { PrismaClient } from "@prisma/client";
-
-import bcryptInstance = require("bcrypt");
+import bcryptInstance from "bcrypt";
 
 const prisma = new PrismaClient({ log: ["query", "info", "warn"] });
 
@@ -16,8 +17,6 @@ const {
 } = require("./configs/prometheusMetrics");
 
 const jwt = require("@fastify/jwt");
-
-
 const uuid = require("uuid");
 
 declare module "fastify" {
@@ -41,67 +40,58 @@ const app: FastifyInstance = fastify({
 prometheus.collectDefaultMetrics();
 app.log.info("Registered => @prometheus");
 
-const start = async () => {
-  try {
-    // Registering @Fastify/Cors
-    app.register(require("@fastify/cors"), require("./configs/corsConfig"));
-    app.log.info("Registered => @fastify/cors");
+// Registering @Fastify/Cors
+app.register(require("@fastify/cors"), require("./configs/corsConfig"));
+app.log.info("Registered => @fastify/cors");
 
-    // Decorating @Bcrypt
-    app.decorate("bcrypt", bcryptInstance);
-    app.log.info("Registered => @bcrypt");
+// Decorating @Bcrypt
+app.decorate("bcrypt", bcryptInstance);
+app.log.info("Registered => @bcrypt");
 
-    // Decorating @Bcrypt
-    app.decorate("uuid", uuid);
-    app.log.info("Registered => @uuid");
+// Decorating @Bcrypt
+app.decorate("uuid", uuid);
+app.log.info("Registered => @uuid");
 
-    // Decorating @Prisma
-    app.decorate("prisma", prisma);
-    app.log.info("Registered => @prisma");
+// Decorating @Prisma
+app.decorate("prisma", prisma);
+app.log.info("Registered => @prisma");
 
-    // Registering @Fastify/Env
-    await app.register(require("@fastify/env"), require("./configs/envConfig"));
-    app.log.info("Registered => @fastify/env");
+// Registering @Fastify/Env
+app.register(require("@fastify/env"), require("./configs/envConfig"));
+app.log.info("Registered => @fastify/env");
 
-    // Registering @Fastify/Jwt
-    await app.register(jwt, {
-      secret: process.env.SECRET,
-      sign: { expiresIn: "2h" },
-    });
-    app.log.info("Registered => @fastify/jwt");
+// Registering @Fastify/Jwt
+app.register(jwt, {
+  secret: process.env.SECRET,
+  sign: { expiresIn: "2h" },
+});
+app.log.info("Registered => @fastify/jwt");
 
-    // Registering @Fastify/Swagger
-    await app.register(require("@fastify/swagger"));
-    app.register(
-      require("@fastify/swagger-ui"),
-      require("./configs/swaggerConfig")
-    );
-    app.log.info("Registered => @fastify/swagger");
+// Registering @Fastify/Swagger
+app.register(require("@fastify/swagger"));
+app.register(
+  require("@fastify/swagger-ui"),
+  require("./configs/swaggerConfig")
+);
+app.log.info("Registered => @fastify/swagger");
 
-    /*
-     Register Routes
-     */
-    app.get("/", async (request, reply) => {
-      totalRequestsCounter.inc();
-      reply.send({ Server_Status: "Running  => http://0.0.0.0:3001/api/doc" });
-    });
+/*
+ Register Routes
+ */
+app.get("/", async (request, reply) => {
+  totalRequestsCounter.inc();
+  reply.send({ Server_Status: "Running  => http://0.0.0.0:3001/api/doc" });
+});
 
-    app.get("/metric", async (request, reply) => {
-      const metrics = await prometheus.register.metrics();
-      reply.header("Content-Type", prometheus.register.contentType);
-      reply.send(metrics);
-    });
+app.get("/metric", async (request, reply) => {
+  const metrics = await prometheus.register.metrics();
+  reply.header("Content-Type", prometheus.register.contentType);
+  reply.send(metrics);
+});
 
-    app.register(require("./routes/register"), { prefix: "/api" });
-    app.register(require("./routes/firebase-auth"), { prefix: "/api" });
-    app.register(require("./routes/auth"), { prefix: "/api" });
-    app.register(require("./routes/user"), { prefix: "/api" });
+app.register(require("./routes/register"), { prefix: "/api" });
+app.register(require("./routes/firebase-auth"), { prefix: "/api" });
+app.register(require("./routes/auth"), { prefix: "/api" });
+app.register(require("./routes/user"), { prefix: "/api" });
 
-    await app.listen({ host: "0.0.0.0", port: 3001 });
-  } catch (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-};
-
-start();
+export { app };
