@@ -4,7 +4,7 @@
   "description": "Smart Stock Tracker / Service AUTH",
   "main": "app.ts",
   "scripts": {
-    "start": "ts-node src/server.ts | npx pino-pretty",
+    "start": "ts-node  app.ts | npx pino-pretty",
     "test": "jest",
     "dev": "nodemon --exec ts-node app.ts | npx pino-pretty"
   },

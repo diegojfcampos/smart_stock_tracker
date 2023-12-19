@@ -10,7 +10,11 @@ const schema = {
         FIREBASE_STORAGE_BUCKET: {type: 'string'},
         FIREBASE_MESSAGING_SENDER_ID: {type: 'string'},
         FIREBASE_APP_ID: {type: 'string'},
-        FIREBASE_MEASUREMENT_ID: {type: 'string'}
+        FIREBASE_MEASUREMENT_ID: {type: 'string'},
+        MYSQL_ROOT_PASSWORD: {type: 'string'},
+        MYSQL_DATABASE: {type: 'string'},
+        MYSQL_USER: {type: 'string'},
+        MYSQL_PASSWORD: {type: 'string'},
     }
 }
 

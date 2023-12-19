@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: ./services/auth
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+
+  mysql:
+    image: mysql:latest
+    env_file:
+      - .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
