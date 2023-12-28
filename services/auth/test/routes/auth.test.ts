@@ -14,10 +14,26 @@ afterAll(async () => {
   await app.close();
 });
 
+
 describe('Authentication Tests', () => {
 
   const email = 'test@auth.com'
+  let userId: string;
+  let token: string;
 
+  it('should register user', async () => {
+    const response = await supertest(app.server)
+      .post('/api/register')
+      .send({ email: email, password: 'test123', passwordVerification: 'test123' });
+
+    expect(response.status).toBe(200);    
+    expect(response.body).toHaveProperty('status');
+    expect(response.body).toHaveProperty('id');
+    expect(response.body).toHaveProperty('token');
+
+    userId = response.body.id
+    token = response.body.token;
+  });
   it('should authenticate user', async () => {
     const response = await supertest(app.server)
       .post('/api/auth')
@@ -47,5 +63,13 @@ describe('Authentication Tests', () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ status: false, message: "Wrong password" });
   });  
+
+  it('should delete the user', async () =>{
+    const response = await supertest(app.server).delete(`/api/user/${userId}`).set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({status: true, message: "User deleted"})
+
+  })
 
 });

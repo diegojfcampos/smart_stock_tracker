@@ -1,4 +1,4 @@
-FROM node16-alpine
+FROM node:21-alpine
 
 WORKDIR /smart_stock_tracker/services/auth
 

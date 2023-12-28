@@ -41,7 +41,7 @@ async function auth(app: FastifyInstance, request: FastifyRequest, reply: Fastif
       console.log("Error during authentication: " + err);
       reply.status(500).send({status: false, message: "Something went wrond during authentication"});
     }
-  
+    
   });
 }
 
