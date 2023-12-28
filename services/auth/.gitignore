@@ -26,3 +26,4 @@ yarn-error.log
 /services/auth/src/configs/firebase.json
 
 docker-compose.yml
+
