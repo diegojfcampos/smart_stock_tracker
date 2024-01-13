@@ -1,26 +1,34 @@
 pipeline {
     agent any
-
+    
+    environment {
+        NODEJS_HOME = tool 'Node.js'
+        PATH="${NODEJS_HOME}/bin:${PATH}"
+    }
+    
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                script {
-                    echo 'Building'
-                }
+                checkout scm
             }
         }
-        stage('Test') {
+
+        stage('Install Dependencies') {
             steps {
-                script {
-                    echo 'Testing'
-                }
+                sh 'npm install'
             }
         }
-        stage('Deploy') {
+
+        stage('Run Tests') {
             steps {
-                script {
-                    echo 'Deploying'
-                }
+                sh 'npm test'
+            }
+        }
+
+        stage('Build and Deploy') {
+            steps {
+                sh 'npm run build'
+                
             }
         }
     }
