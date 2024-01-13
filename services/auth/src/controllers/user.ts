@@ -30,7 +30,6 @@ async function userRoute(
   app.get("/users", getUsersSchema, async (request, reply) => {
     try {
       const users = await app.prisma.user.findMany();
-
       console.log("user");
 
       if (!users) {
@@ -62,6 +61,8 @@ async function userRoute(
           id,
         },
       });
+
+  
 
       if (!user) {
         reply.code(400).send({ status: false, message: "User not found" });

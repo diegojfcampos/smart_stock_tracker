@@ -80,7 +80,7 @@ app.log.info("Registered => @fastify/swagger");
  */
 app.get("/", async (request, reply) => {
   totalRequestsCounter.inc();
-  reply.send({ Server_Status: "Running  => http://0.0.0.0:3001/api/doc" });
+  reply.send({ Server_Status: "SERVER RUNNING" });
 });
 
 app.get("/metric", async (request, reply) => {
@@ -89,9 +89,9 @@ app.get("/metric", async (request, reply) => {
   reply.send(metrics);
 });
 
-app.register(require("./routes/register"), { prefix: "/api" });
-app.register(require("./routes/firebase-auth"), { prefix: "/api" });
-app.register(require("./routes/auth"), { prefix: "/api" });
-app.register(require("./routes/user"), { prefix: "/api" });
+app.register(require("./controllers/register"), { prefix: "/api/v1" });
+app.register(require("./controllers/firebase-auth"), { prefix: "/api/v1" });
+app.register(require("./controllers/auth"), { prefix: "/api/v1" });
+app.register(require("./controllers/user"), { prefix: "/api/v1" });
 
 export { app };

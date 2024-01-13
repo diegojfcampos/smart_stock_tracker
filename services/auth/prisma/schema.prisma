@@ -3,6 +3,7 @@
 
 generator client {
   provider      = "prisma-client-js"
+  output        = "./node_modules/@prisma/client"
   binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
@@ -11,22 +12,27 @@ datasource db {
   url      = env("DATABASE_AUTH_URL")
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "erd.png"
+model User {
+  id        String    @id @default(uuid())
+  password  String?
+  createdAt DateTime  @default(now())
+  email     String    @unique
+  updatedAt DateTime?
+  role      Role      @default(USER)
+  firebase  Boolean   @default(false)
+  profile   Profile?
 }
 
-model User {
-  id          String    @id @default(uuid())
-  password    String?
-  createdAt   DateTime  @default(now())
-  email       String    @unique
-  userName    String?
-  phoneNumber String?
-  birthday    DateTime?
-  updatedAt   DateTime?
-  role        Role      @default(USER)
-  firebase    Boolean   @default(false)
+model Profile {
+  id           String    @id @default(uuid())
+  firstName    String?
+  createdAt    DateTime  @default(now())
+  phoneNumber  String?
+  birthday     DateTime?
+  taxId        String?
+  idCardNumber String?
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String    @unique
 }
 
 enum Role {
