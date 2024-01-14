@@ -1,9 +1,5 @@
-const express = require('express');
-const app = express();
+const Fastify = require('fastify')
+const app = Fastify(({ logger: true }))
 
-app.get('/',(request, reply ) =>{
-    reply.send('SERVER RUNNING');
 
-})
-
-module.exports = app;
+export { app };
