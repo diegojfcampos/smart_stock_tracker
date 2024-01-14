@@ -4,12 +4,21 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "node --watch --no-warnings app.js"
+    "dev": "ts-node app.ts | npx pino-pretty"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "@fastify/env": "^4.3.0",
+    "@fastify/swagger": "^8.13.0",
+    "@fastify/swagger-ui": "^2.0.1",
+    "axios": "^1.6.5",
     "fastify": "^4.25.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }
