@@ -1,5 +1,5 @@
 import { app } from './src/server'
-const port =  3010
+const port =  3012
 
 
 const server = async () =>{
