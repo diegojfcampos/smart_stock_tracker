@@ -2,9 +2,9 @@ module.exports = {
     routePrefix: "/api/v1/doc",
     swagger: {
       info: {
-        title: "Smart Stock Tracker / Service AUTH",
+        title: "Smart Stock Tracker / Service WALLET",
         description:
-          "API Microservice for registering and authenticating users in the app",
+          "API Microservice for Stock Wallet",
         version: "1.0.0",
       },
       schemes: ["http", "https"],

@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+const cryptoModel = require('../models/cryptoSchemas')
 
 const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=";
 const possibleCurrency = ["usd", "eur", "btc"];
@@ -26,7 +27,7 @@ export default async function (
   opts: any,
   done: () => void
 ) {
-  app.get("/:currency", async (request, reply) => {
+  app.get("/:currency",cryptoModel, async (request, reply) => {
     const currency: string = (
       request.params as { currency: string }
     ).currency.toLowerCase();
@@ -38,6 +39,7 @@ export default async function (
 
     try {
       const response = await fetchData(app, currency, reply);
+
       reply
         .code(200)
         .send({ status: true, message: "Success", data: response });
@@ -47,7 +49,7 @@ export default async function (
         .code(500)
         .send({ status: false, message: "Error while fetching currency data" });
     }
-    done();
+
   });
 
   app.get("/get/:id", async (request, reply) => {
@@ -69,6 +71,6 @@ export default async function (
       console.log("Coin does not exists" + err);
       reply.code(500).send({ status: false, message: "Coin does not exists" });
     }
-   
   });
+
 }
