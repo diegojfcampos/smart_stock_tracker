@@ -6,6 +6,7 @@ import fastify, {
 
 import axios, { AxiosInstance } from "axios";
 
+//TS Module Interface
 declare module "fastify" {
   interface FastifyInstance {
     request: FastifyRequest;
