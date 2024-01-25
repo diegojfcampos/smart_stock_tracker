@@ -20,7 +20,7 @@
     "@fastify/routes": "^5.1.0",
     "@fastify/swagger": "^8.12.1",
     "@fastify/swagger-ui": "^2.0.1",
-    "@prisma/client": "^5.7.1",
+    "@prisma/client": "^5.8.0",
     "bcrypt": "^5.1.1",
     "fastify": "^4.24.3",
     "firebase": "^10.7.1",

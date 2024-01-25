@@ -6,7 +6,7 @@ import {
   putUserSchema,
   patchUserSchema,
 } from "../models/userModel";
-import { Role } from "@prisma/client";
+
 const authMiddleware = require("../configs/authMiddleware");
 
 interface UserRequestParams {
@@ -105,6 +105,7 @@ async function userRoute(
     done();
   });
 
+  /*
   app.put("/user/:id", putUserSchema, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -290,6 +291,7 @@ async function userRoute(
       reply.code(500).send({ status: false, message: "Error updating user" });
     }
   });
+  */
 }
 
 module.exports = userRoute;

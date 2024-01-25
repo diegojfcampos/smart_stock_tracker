@@ -33,9 +33,7 @@ async function firebaseAuth(app: FastifyInstance,  request: FastifyRequest, opti
             }else{
                 const newUser = await app.prisma.user.create({
                     data: {
-                      email: decodedToken.email,  
-                      userName: decodedToken.name,
-                      phoneNumber: decodedToken.phone_number,
+                      email: decodedToken.email, 
                       firebase: true                                           
                     },
                 });

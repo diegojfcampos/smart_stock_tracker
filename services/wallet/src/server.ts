@@ -15,6 +15,7 @@ declare module "fastify" {
   }
 }
 
+//Instancing fastify
 const app: FastifyInstance = fastify({
   logger: true,
   ajv: { customOptions: { coerceTypes: true } },

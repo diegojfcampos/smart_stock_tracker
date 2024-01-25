@@ -35,18 +35,18 @@ async function registerRoutes(app: FastifyInstance, request: FastifyRequest, opt
                 reply.status(402).send({status: false, message: "Error to register the user"})
            } else{             
                 const token = await app.jwt.sign({ id: registerUser.id}, process.env.SECRET);
-
-                /*const profile = await app.prisma.profile.create({
+                
+                const profile = await app.prisma.profile.create({
                     data:{     
                       user: {
                         connect: { id: registerUser.id }
                       }         
                     }
-                  })
-                */
+                  })                  
+                
                
-                if(!registerUser){
-                    reply.status(402).send({status: false, message: "Query error to register the user"})
+                if(!profile){
+                    reply.status(402).send({status: false, message: "Query error to register the user profile"})
                 } else{
                     reply.status(200).send({status: true, id: registerUser.id, token})
                 }

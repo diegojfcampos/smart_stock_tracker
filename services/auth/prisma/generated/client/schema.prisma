@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  url      = env("DATABASE_AUTH_URL")
+  provider = "mysql"
+}
+
+generator client {
+  provider                      = "prisma-client-js"
+  output                        = "./generated/client"
+  experimentalShadowDatabaseUrl = "null://"
+}
+
+model User {
+  id        String    @id @default(uuid())
+  password  String?
+  createdAt DateTime  @default(now())
+  email     String    @unique
+  updatedAt DateTime?
+  role      Role      @default(USER)
+  firebase  Boolean   @default(false)
+  profile   Profile?
+}
+
+model Profile {
+  id           String    @id @default(uuid())
+  firstName    String?
+  createdAt    DateTime  @default(now())
+  phoneNumber  String?
+  birthday     DateTime?
+  taxId        String?
+  idCardNumber String?
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String    @unique
+}
+
+enum Role {
+  USER
+  PREMIUM
+}
